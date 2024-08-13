@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Questionnaire</title>
+    <style>
+        body {
+            font-family: var(--primary-font,'Quicksand', sans-serif);
+            font-weight: var(--normal-font-weight, 400);
+            line-height: 1.6;
+            background-color: white;
+            background-image: url("llll.png"); 
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .question {
+            background-color: #12c4a0;
+            padding: 30px;
+            border: 2px solid #090b3c;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            color: #f5f5f5;
+            width: 90%;
+            max-width: 1000px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .question h2 {
+            font-family: var(--primary-font,'Quicksand', sans-serif);
+            font-weight: var(--bold-font-weight, 700);
+            margin-bottom: 10px;
+        }
+        .question p {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #090b3c;
+            color: #ffffff;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            font-family: var(--primary-font,'Quicksand', sans-serif);
+            font-weight: var(--normal-font-weight, 400);
+        }
+        button:hover {
+            background-color: #949295;
+        }
+        .progress {
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .question {
+                padding: 15px;
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="question" id="question1">
+        <h1>Question 1</h1>
+        <h2>What is your gender?</h2>
+        <input type="radio" id="male" name="gender" value="1" required>
+        <label for="male">Male</label><br>
+        <input type="radio" id="female" name="gender" value="0" required>
+        <label for="female">Female</label><br>
+        <button id="nextButton1">Next</button>
+    </div>
+    <div class="question" id="question2" style="display: none;">
+        <h1>Question 2</h1>
+        <h2>Please enter your hemoglobin count</h2>
+        <p>(in grams per deciliter):</p>
+        <input type="number" id="hemoglobinCount" name="hemoglobinCount" required>
+        <button id="nextButton2">Next</button>
+    </div>
+    <div class="question" id="question3" style="display: none;">
+        <h1>Question 3</h1>
+        <h2>What is your age?</h2>
+        <input type="number" id="age" name="age" required>
+        <button id="nextButton3">Next</button>
+    </div>
+    <div class="question" id="question4" style="display: none;">
+        <h1>Question 4</h1>
+        <h2>Please enter your weight</h2>
+        <p>(in kilograms):</p>
+        <input type="number" id="weight" name="weight" required>
+        <button id="nextButton4">Next</button>
+    </div>
+    <div class="question" id="question5" style="display: none;">
+        <h1>Question 5</h1>
+        <h2>Do you have any underlying diseases?</h2>
+        <p>(e.g., diabetes, hypertension, cardiac issues, etc)</p>
+        <input type="radio" id="yesUnderlyingDisease" name="underlyingDisease" value="1" required>
+        <label for="yesUnderlyingDisease">Yes</label><br>
+        <input type="radio" id="noUnderlyingDisease" name="underlyingDisease" value="0" required>
+        <label for="noUnderlyingDisease">No</label><br>
+        <button id="nextButton5">Next</button>
+    </div>
+    <div class="question" id="question6" style="display: none;">
+        <h1>Question 6</h1>
+        <h2>Do you have any active infections?</h2>
+        <p>(e.g., HIV, Hepatitis, Active allergy symptoms, etc)</p>
+        <input type="radio" id="yesInfections" name="infections" value="1" required>
+        <label for="yesInfections">Yes</label><br>
+        <input type="radio" id="noInfections" name="infections" value="0" required>
+        <label for="noInfections">No</label><br>
+        <button id="nextButton6">Next</button>
+    </div>
+    <div class="question" id="question7" style="display: none;">
+        <h1>Question 7</h1>
+        <h2>Are you currently taking any medications?</h2>
+        <p>(e.g., Anticoagulants, Antibiotics, Antivirals, Isotretinoin, etc)</p>
+        <input type="radio" id="yesMedications" name="medications" value="1" required>
+        <label for="yesMedications">Yes</label><br>
+        <input type="radio" id="noMedications" name="medications" value="0" required>
+        <label for="noMedications">No</label><br>
+        <button id="nextButton7">Next</button>
+    </div>
+    <div class="question" id="question8" style="display: none;">
+        <h1>Question 8</h1>
+        <h2>How many days has it been since you last consumed alcohol?</h2>
+        <p>(Note: if you don't drink alcohol and if it's been over a month please write "30")</p>
+        <input type="number" id="daysSinceAlcohol" name="daysSinceAlcohol" required>
+        <button id="nextButton8">Next</button>
+    </div>
+    <div class="question" id="question9" style="display: none;">
+        <h1>Question 9</h1>
+        <h2>How often do you donate blood in a year?</h2>
+        <input type="number" id="bloodDonationFrequency" name="bloodDonationFrequency" required>
+        <button id="submitButton">Proceed to Confirmation</button>
+    </div>
+    <div class="progress">
+        <span id="progress">1</span> / <span id="totalQuestions">9</span>
+    </div>
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = document.querySelectorAll('.question').length;
+
+        document.getElementById('nextButton1').addEventListener('click', function() {
+            validateGender();
+        });
+
+        document.getElementById('nextButton2').addEventListener('click', function() {
+            validateHemoglobinCount();
+        });
+
+        document.getElementById('nextButton3').addEventListener('click', function() {
+            validateAge();
+        });
+
+        document.getElementById('nextButton4').addEventListener('click', function() {
+            validateWeight();
+        });
+
+        document.getElementById('nextButton5').addEventListener('click', function() {
+            validateUnderlyingDisease();
+        });
+
+        document.getElementById('nextButton6').addEventListener('click', function() {
+            validateInfections();
+        });
+
+        document.getElementById('nextButton7').addEventListener('click', function() {
+            validateMedications();
+        });
+
+        document.getElementById('nextButton8').addEventListener('click', function() {
+            validateDaysSinceAlcohol();
+        });
+
+        document.getElementById('submitButton').addEventListener('click', function() {
+            validateBloodDonationFrequency();
+            collectFormData();
+        });
+
+        function validateGender() {
+            const genderInputs = document.querySelectorAll('input[name="gender"]:checked');
+            if (genderInputs.length === 0) {
+                alert("Please select a gender.");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function validateHemoglobinCount() {
+            const hemoglobinCount = parseFloat(document.getElementById('hemoglobinCount').value);
+            if (isNaN(hemoglobinCount) || hemoglobinCount < 0 || hemoglobinCount > 25) {
+                alert("Please enter a valid hemoglobin count in grams per deciliter.");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function validateAge() {
+            const age = parseInt(document.getElementById('age').value);
+            if (isNaN(age) || age < 1 || age > 100) {
+                alert("Please enter a valid age.");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function validateWeight() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            if (isNaN(weight) || weight < 0 || weight > 150) {
+                alert("Please enter a valid weight in kilograms.");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function validateUnderlyingDisease() {
+            const underlyingDisease = document.querySelector('input[name="underlyingDisease"]:checked');
+            if (!underlyingDisease) {
+                alert("Please indicate if you have any underlying diseases.");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function validateInfections() {
+            const infections = document.querySelector('input[name="infections"]:checked');
+            if (!infections) {
+                alert("Please indicate if you have any infections.");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function validateMedications() {
+            const medications = document.querySelector('input[name="medications"]:checked');
+            if (!medications) {
+                alert("Please indicate if you are currently taking any medications.");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function validateDaysSinceAlcohol() {
+            const daysSinceAlcohol = parseInt(document.getElementById('daysSinceAlcohol').value);
+            if (isNaN(daysSinceAlcohol) || daysSinceAlcohol < 0 || daysSinceAlcohol > 30) {
+                alert("Please enter a valid number of days since you last consumed alcohol (0-30).");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function validateBloodDonationFrequency() {
+            const bloodDonationFrequency = document.getElementById('bloodDonationFrequency').value;
+            if (!bloodDonationFrequency) {
+                alert("Please select how often you donate blood.");
+            } else {
+                nextQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            document.getElementById('question' + currentQuestion).style.display = 'none';
+            currentQuestion++;
+            if (currentQuestion <= totalQuestions) {
+                document.getElementById('question' + currentQuestion).style.display = 'block';
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            document.getElementById('progress').textContent = currentQuestion;
+        }
+
+        function collectFormData() {
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const hemoglobinCount = document.getElementById('hemoglobinCount').value;
+            const age = document.getElementById('age').value;
+            const weight = document.getElementById('weight').value;
+            const underlyingDisease = document.querySelector('input[name="underlyingDisease"]:checked').value;
+            const infections = document.querySelector('input[name="infections"]:checked').value;
+            const medications = document.querySelector('input[name="medications"]:checked').value;
+            const daysSinceAlcohol = document.getElementById('daysSinceAlcohol').value;
+            const bloodDonationFrequency = document.getElementById('bloodDonationFrequency').value;
+
+            const formData = {
+                gender,
+                hemoglobinCount,
+                age,
+                weight,
+                underlyingDisease,
+                infections,
+                medications,
+                daysSinceAlcohol,
+                bloodDonationFrequency
+            };
+
+            console.log(JSON.stringify(formData));
+
+            // Redirect to the confirmation page with the JSON data
+            redirectToConfirmationPage(formData);
+        }
+
+        function redirectToConfirmationPage(data) {
+            // Use the JSON data as needed, for example, you can send it to a server
+            // or pass it to another page
+            alert("Collected Data: " + JSON.stringify(data));
+            // For now, just log the data to the console
+            console.log("Redirecting to confirmation page with data: ", data);
+            // If you want to pass the data to another page, you can use sessionStorage
+            sessionStorage.setItem('formData', JSON.stringify(data));
+            window.location.href = 'confirmation.html';
+        }
+    </script>
+</body>
+</html>

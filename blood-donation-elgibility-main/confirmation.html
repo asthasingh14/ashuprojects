@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation Page</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            border-radius: 15px;
+            width: 100%;
+        }
+
+        th, td {
+            border: 2px solid #090b3c;
+            text-align: left;
+            padding: 17px;
+        }
+
+        th {
+            background-color: #12c4a0;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #090b3c;
+            color: #fff;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #12c4a0;
+        }
+
+        body {
+            font-family: var(--primary-font, 'Quicksand', sans-serif);
+            font-weight: var(--normal-font-weight, 400);
+            background-color: var(--bg-white, white);
+        }
+
+        .button-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: #090b3c;">Confirmation Page</h1>
+    <h2 style="text-align: center; color: #090b3c;">Please review your submitted information:</h2>
+
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td id="gender"></td>
+        </tr>
+        <tr>
+            <td>Hemoglobin Count</td>
+            <td id="hemoglobinCount"></td>
+        </tr>
+        <tr>
+            <td>Age</td>
+            <td id="age"></td>
+        </tr>
+        <tr>
+            <td>Weight</td>
+            <td id="weight"></td>
+        </tr>
+        <tr>
+            <td>Underlying Diseases</td>
+            <td id="underlyingDiseases"></td>
+        </tr>
+        <tr>
+            <td>Infections</td>
+            <td id="infections"></td>
+        </tr>
+        <tr>
+            <td>Medications</td>
+            <td id="medications"></td>
+        </tr>
+        <tr>
+            <td>Days Since Last Consumed Alcohol</td>
+            <td id="daysSinceAlcohol"></td>
+        </tr>
+        <tr>
+            <td>Blood Donation Frequency</td>
+            <td id="bloodDonationFrequency"></td>
+        </tr>
+    </table>
+
+    <div class="button-container">
+        <button onclick="editFields()">Edit</button>
+        <button onclick="submitForm()">Submit</button>
+        <!-- <button onclick="redirectToResult()">Go to Result Page</button> -->
+    </div>
+
+    <script>
+        function displayInfoFromSessionStorage() {
+            const formData = JSON.parse(sessionStorage.getItem('formData'));
+            if (formData) {
+                document.getElementById('gender').textContent = formData.gender;
+                document.getElementById('hemoglobinCount').textContent = formData.hemoglobinCount;
+                document.getElementById('age').textContent = formData.age;
+                document.getElementById('weight').textContent = formData.weight;
+                document.getElementById('underlyingDiseases').textContent = formData.underlyingDisease;
+                document.getElementById('infections').textContent = formData.infections;
+                document.getElementById('medications').textContent = formData.medications;
+                document.getElementById('daysSinceAlcohol').textContent = formData.daysSinceAlcohol;
+                document.getElementById('bloodDonationFrequency').textContent = formData.bloodDonationFrequency;
+            }
+        }
+
+        // window.onload = displayInfoFromSessionStorage;
+
+        // function editFields() {
+        //     window.location.href = 'test.html';
+        // }
+
+        // function submitForm() {
+        //     const formData = JSON.parse(sessionStorage.getItem('formData'));
+            
+        //     if (Object.values(formData).some(value => value === '')) {
+        //         alert('Please review all information and ensure all fields are complete before submitting.');
+        //     } else {
+        //         fetch('http://127.0.0.1:3001/predict', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             body: JSON.stringify(formData),
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log('Success:', data);
+        //             // You can display the prediction result here or redirect to another page
+        //             alert(`Prediction: ${data.prediction}`);
+        //             // window.location.href = '/result.html'; // Redirect to result page
+        //             window.location.href = `result.html?prediction=${data.prediction}`;
+        //         })
+        //         .catch((error) => {
+        //             console.error('Error:', error);
+        //         });
+        //     }
+        // }
+        window.onload = displayInfoFromSessionStorage;
+
+        function editFields() {
+            window.location.href = 'test.html';
+        }
+
+        function submitForm() {
+            const formData = JSON.parse(sessionStorage.getItem('formData'));
+            
+            if (Object.values(formData).some(value => value === '')) {
+                alert('Please review all information and ensure all fields are complete before submitting.');
+            } else {
+                fetch('http://127.0.0.1:3001/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // Redirect to result.html with prediction
+                    window.location.href = `result.html?prediction=${encodeURIComponent(data.prediction)}`;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        }
+
+        // function redirectToResult() {
+        //     window.location.href = 'templates/result.html'; // Redirect to result page without submitting the form
+        // }
+    </script>
+</body>
+</html>

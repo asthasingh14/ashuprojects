@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Poppins:wght@400;700&display=swap');
+
+        :root {
+            --primary-font: 'Quicksand', sans-serif;
+            --secondary-font: 'Poppins', sans-serif;
+            --normal-font-weight: 400;
+            --bold-font-weight: 700;
+            --primary-color: #12c4a0;
+            --secondary-color: #090b3c;
+        }
+
+        body {
+            font-family: var(--primary-font);
+            background-color: whitesmoke;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #12c4a0;
+            border: 2px solid #090b3c;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: var(--secondary-color);
+        }
+
+        h1 {
+            font-family: var(--secondary-font);
+            font-weight: var(--bold-font-weight);
+            color: var(--secondary-color);
+        }
+
+        h3 {
+            font-family: var(--secondary-font);
+            font-weight: var(--bold-font-weight);
+            color: var(--secondary-color);
+        }
+
+        p {
+            font-family: var(--primary-font);
+            font-weight: var(--normal-font-weight);
+        }
+
+        .result-box {
+            width: 400px;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 20px;
+            font-size: 1.5em;
+            font-weight: var(--bold-font-weight);
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Result</h1>
+        <h3>The result is:</h3>
+        <div class="result-box" id="resultBox">
+            <!-- Prediction result will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Extract the prediction parameter from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const prediction = urlParams.get('prediction');
+            
+            // Display the prediction result in the result-box div
+            if (prediction === '1') {
+        document.getElementById('resultBox').textContent = 'Not Eligible';
+    } else if (prediction === '0') {
+        document.getElementById('resultBox').textContent = 'Eligible';
+    } else {
+        document.getElementById('resultBox').textContent = 'No prediction result available.';
+    }
+        });
+    </script>
+</body>
+</html>
